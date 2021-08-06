@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.camera.dao.mapper.EquipInfoMapper">
+
+    <!--查询设备和出入口信息-->
+    <select id="findEquipAndGateInfo" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.bean.EquipGateInfo">
+      SELECT
+            t.devicecode,
+            t.devicename,
+            t.pointcode,
+            t.ip,
+            t.`port`,
+            t.videofunc,
+            t.voice_channel voiceChannel,
+            g.pointname,
+            g.parkcode,
+            g.region_code regionCode,
+            g.point_func pointFunc,
+            r.region_type regionType,
+            r.parent_region parentRegion,
+            r.region_type regionType,
+            r.parent_region parentRegion,
+            r.restricted_access restrictedAccess,
+            r.whitelist_privileges whitelistPrivileges
+        FROM
+            equip_info t,
+            gate_info g,
+            park_region_info r
+        WHERE
+            t.pointcode = g.pointcode
+            AND g.region_code = r.region_code
+            AND t.devicecode = #{devicecode,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="findEquipList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.bean.EquipBean">
+      SELECT
+            t.devicecode,
+            t.devicename,
+            t.pointcode,
+            t.ip,
+            t.`port`,
+            t.videofunc,
+            t.voice_channel voiceChannel
+        FROM
+            equip_info t
+        WHERE
+            t.first_second = 1
+
+    </select>
+
+    <select id="findEquipGateList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.EquipGateBean">
+      SELECT
+            e.devicecode,
+            e.devicename,
+            g.pointcode,
+            g.pointname,
+            e.ip,
+            e.videofunc,
+            e.voice_channel voiceChannel
+        FROM
+            equip_info e,
+            gate_info g
+        WHERE
+            e.pointcode = g.pointcode
+    </select>
+
+    <select id="findEquipByPointCode" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.bean.EquipBean">
+      SELECT
+            t.devicecode,
+            t.devicename,
+            t.pointcode,
+            t.ip,
+            t.`port`,
+            t.videofunc,
+            t.voice_channel voiceChannel
+        FROM
+            equip_info t
+        WHERE
+            t.pointcode = #{pointCode,jdbcType=VARCHAR}
+
+    </select>
+
+    <delete id="deleteEquipByDeviceCode" parameterType="java.lang.String">
+       DELETE
+        FROM
+            equip_info
+        WHERE
+            devicecode = #{pointCode,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

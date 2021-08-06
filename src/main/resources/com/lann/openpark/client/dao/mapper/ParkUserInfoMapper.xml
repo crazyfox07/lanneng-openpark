@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.client.dao.mapper.ParkUserInfoMapper">
+
+    <select id="findMenuList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.dao.entiy.ClientMenu">
+        SELECT
+            t.id,
+            t.m_class mClass,
+            t.m_index mIndex,
+            t.m_name mName,
+            t.m_order mOrder,
+            t.m_parent mParent,
+            t.m_type mType,
+            t.m_yxbz mYxbz
+        FROM
+            client_menu t,
+            park_user_info u,
+            role_limit l,
+            user_role r
+        WHERE
+            u.userid = r.user_id
+            AND r.role_id = l.role_id
+            AND u.userid = r.user_id
+            AND l.menu_id = t.id
+            AND u.userid = #{userid}
+            AND t.m_parent = #{parent}
+            order by t.m_order
+    </select>
+
+</mapper>

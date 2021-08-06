@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.client.dao.mapper.GateInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.lann.openpark.client.bean.RegionGateBean">
+        <id column="pointcode" property="pointcode" jdbcType="VARCHAR"/>
+        <result column="pointname" property="pointname" jdbcType="VARCHAR"/>
+        <result column="region_code" property="regionCode" jdbcType="VARCHAR"/>
+        <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
+        <result column="point_func" property="pointFunc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询所有出入口信息-->
+    <select id="findGateInfoAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            g.pointcode,
+            g.pointname,
+            r.region_code,
+            r.region_name,
+            g.point_func
+        FROM
+            gate_info g,
+            park_region_info r
+        WHERE
+            g.region_code = r.region_code
+    </select>
+
+
+</mapper>

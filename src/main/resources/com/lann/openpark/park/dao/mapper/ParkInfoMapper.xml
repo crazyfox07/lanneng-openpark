@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.park.dao.mapper.ParkInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.lann.openpark.park.bean.ParkInfoBean">
+        <id column="parkcode" property="parkcode" jdbcType="VARCHAR"/>
+        <result column="parkname" property="parkname" jdbcType="VARCHAR"/>
+        <result column="roadid" property="roadid" jdbcType="VARCHAR"/>
+        <result column="berth_count" property="berthCount" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="location" property="location" jdbcType="DOUBLE"/>
+        <result column="principal" property="principal" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="remain_berth_count" property="remainBerthCount" jdbcType="INTEGER"/>
+        <result column="rectify_count" property="rectifyCount" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询停车场信息-->
+    <select id="findParkInfo" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        SELECT
+        parkcode,
+        parkname,
+        roadid,
+        berth_count,
+        address,
+        location,
+        principal,
+        phone,
+        remain_berth_count,
+        rectify_count
+        FROM
+        park_info t
+        WHERE
+        t.parkcode = #{parkcode,jdbcType=VARCHAR}
+    </select>
+
+    <!--停车场更新车位数-->
+    <update id="updateBerthCount" parameterType="com.lann.openpark.park.bean.ParkInfoBean">
+
+        UPDATE park_info t
+        SET t.remain_berth_count = #{remainBerthCount,jdbcType=INTEGER},
+        rectify_count = #{rectifyCount,jdbcType=INTEGER}
+        WHERE
+        t.parkcode = #{parkcode,jdbcType=VARCHAR}
+
+    </update>
+
+</mapper>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.order.dao.mapper.ParkChargeInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.lann.openpark.order.dao.entiy.ParkChargeInfo">
+        <id column="nid" property="nid" jdbcType="VARCHAR"/>
+        <result column="carcolor" property="carcolor" jdbcType="VARCHAR"/>
+        <result column="carno" property="carno" jdbcType="VARCHAR"/>
+        <result column="carno_original" property="carnoOriginal" jdbcType="VARCHAR"/>
+        <result column="charge" property="charge" jdbcType="FLOAT"/>
+        <result column="charge_detail" property="chargeDetail" jdbcType="VARCHAR"/>
+        <result column="collectiondate1" property="collectiondate1" jdbcType="TIMESTAMP"/>
+        <result column="collectiondate2" property="collectiondate2" jdbcType="TIMESTAMP"/>
+        <result column="coupon_fee" property="couponFee" jdbcType="FLOAT"/>
+        <result column="cpic_enter_path" property="cpicEnterPath" jdbcType="VARCHAR"/>
+        <result column="cpic_exit_path" property="cpicExitPath" jdbcType="VARCHAR"/>
+        <result column="deduction_type" property="deductionType" jdbcType="VARCHAR"/>
+        <result column="deduction_money" property="deductionMoney" jdbcType="FLOAT"/>
+        <result column="derate_fee" property="derateFee" jdbcType="FLOAT"/>
+        <result column="devicecode" property="devicecode" jdbcType="VARCHAR"/>
+        <result column="devicecode_ext" property="devicecodeExt" jdbcType="VARCHAR"/>
+        <result column="discount" property="discount" jdbcType="FLOAT"/>
+        <result column="enter_nid" property="enterNid" jdbcType="VARCHAR"/>
+        <result column="exit_comment" property="exitComment" jdbcType="VARCHAR"/>
+        <result column="exit_nid" property="exitNid" jdbcType="VARCHAR"/>
+        <result column="exit_type" property="exitType" jdbcType="VARCHAR"/>
+        <result column="free_comment" property="freeComment" jdbcType="VARCHAR"/>
+        <result column="licensetype" property="licensetype" jdbcType="VARCHAR"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="parking_type" property="parkingType" jdbcType="VARCHAR"/>
+        <result column="pay_ype" property="payType" jdbcType="VARCHAR"/>
+        <result column="plate_position" property="platePosition" jdbcType="VARCHAR"/>
+        <result column="pointcode_ent" property="pointcodeEnt" jdbcType="VARCHAR"/>
+        <result column="pointcode_ext" property="pointcodeExt" jdbcType="VARCHAR"/>
+        <result column="pointname_ent" property="pointnameEnt" jdbcType="VARCHAR"/>
+        <result column="pointname_ext" property="pointnameExt" jdbcType="VARCHAR"/>
+        <result column="proof_url" property="proofUrl" jdbcType="VARCHAR"/>
+        <result column="realcharge" property="realcharge" jdbcType="FLOAT"/>
+        <result column="record_time" property="recordTime" jdbcType="TIMESTAMP"/>
+        <result column="remain_money" property="remainMoney" jdbcType="FLOAT"/>
+        <result column="totalcharge" property="totalcharge" jdbcType="FLOAT"/>
+        <result column="vehicle_type" property="vehicleType" jdbcType="VARCHAR"/>
+        <result column="plate_type" property="plateType" jdbcType="VARCHAR"/>
+        <result column="in_upload" property="inUpload" jdbcType="INTEGER"/>
+        <result column="out_upload" property="outUpload" jdbcType="INTEGER"/>
+        <result column="pay_upload" property="payUpload" jdbcType="INTEGER"/>
+        <result column="in_random" property="inRandom" jdbcType="VARCHAR"/>
+        <result column="in_random" property="outRandom" jdbcType="VARCHAR"/>
+        <result column="pay_random" property="payRandom" jdbcType="VARCHAR"/>
+        <result column="park_duration" property="parkDuration" jdbcType="INTEGER"/>
+        <result column="order_type" property="orderType" jdbcType="INTEGER"/>
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP"/>
+        <result column="pay_type" property="payType" jdbcType="VARCHAR"/>
+        <result column="vip_id" property="vipId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.lann.openpark.client.bean.OrderInfo">
+        <result column="nid" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="carno" property="plateNo" jdbcType="VARCHAR"/>
+        <result column="plate_type" property="plateType" jdbcType="VARCHAR"/>
+        <result column="time_in" property="timeIn" jdbcType="VARCHAR"/>
+        <result column="time_out" property="timeOut" jdbcType="VARCHAR"/>
+        <result column="exit_type" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="cpic_enter_path" property="inImg" jdbcType="VARCHAR"/>
+        <result column="cpic_exit_path" property="outImg" jdbcType="VARCHAR"/>
+        <result column="totalcharge" property="orderFee" jdbcType="FLOAT"/>
+        <result column="charge" property="payFee" jdbcType="FLOAT"/>
+        <result column="park_duration" property="parkDuration" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.lann.openpark.client.bean.DetectInfo">
+        <result column="nid" property="nid" jdbcType="VARCHAR"/>
+        <result column="carno" property="carno" jdbcType="VARCHAR"/>
+        <result column="driveTime" property="driveTime" jdbcType="VARCHAR"/>
+        <result column="direction" property="direction" jdbcType="VARCHAR"/>
+        <result column="pointname" property="pointname" jdbcType="VARCHAR"/>
+        <result column="pic" property="pic" jdbcType="VARCHAR"/>
+        <result column="pointcode" property="pointcode" jdbcType="VARCHAR"/>
+        <result column="regionCode" property="regionCode" jdbcType="VARCHAR"/>
+        <result column="regionName" property="regionName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap3" type="com.lann.openpark.client.bean.OrderPayInfo">
+        <result column="carno" property="carno" jdbcType="VARCHAR"/>
+        <result column="payFee" property="payFee" jdbcType="FLOAT"/>
+        <result column="payType" property="payType" jdbcType="VARCHAR"/>
+        <result column="payTime" property="payTime" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="collectiondate1" property="collectiondate1" jdbcType="VARCHAR"/>
+        <result column="collectiondate2" property="collectiondate2" jdbcType="VARCHAR"/>
+        <result column="duration" property="duration" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--更新驶入记录上传的随机数-->
+    <update id="updateDriveInRandom" parameterType="java.lang.String">
+
+        update park_charge_info t set t.in_random = #{random,jdbcType=VARCHAR} where t.in_upload >=0 and t.in_upload &lt;= 5
+
+	</update>
+
+    <!--更新驶离记录上传的随机数-->
+    <update id="updateDriveOutRandom" parameterType="java.lang.String">
+
+        update park_charge_info t set t.out_random = #{random,jdbcType=VARCHAR} where t.out_upload >=0 and t.out_upload &lt;= 5
+
+	</update>
+
+
+    <!--更新支付录上传的随机数-->
+    <update id="updatePayDetailRandom" parameterType="java.lang.String">
+
+        update park_charge_info t set t.pay_random = #{random,jdbcType=VARCHAR} where t.out_upload >=0 and t.pay_upload &lt;= 5
+
+	</update>
+
+    <select id="queryOrders" parameterType="java.lang.String" resultMap="BaseResultMap1">
+        SELECT
+        t.nid,
+        t.carno,
+        t.plate_type,
+        t.exit_type,
+        DATE_FORMAT(t.collectiondate1,'%Y-%m-%d %H:%i:%s') as time_in,
+        DATE_FORMAT(t.collectiondate2,'%Y-%m-%d %H:%i:%s') as time_out,
+        t.totalcharge,
+        t.charge,
+        t.cpic_enter_path,
+        t.cpic_exit_path,
+        t.park_duration
+        FROM
+        park_charge_info t
+        <where>
+            <if test="startDate != null and startDate != '' ">
+                and t.collectiondate1 >= '${startDate}'
+            </if>
+            <if test="endDate != null and endDate != '' ">
+                and t.collectiondate1 &lt;= '${endDate}'
+            </if>
+            <if test="startDate1 != null and startDate1 != '' ">
+                and t.collectiondate2 >= '${startDate1}'
+            </if>
+            <if test="endDate1 != null and endDate1 != '' ">
+                and t.collectiondate2 &lt;= '${endDate1}'
+            </if>
+            <if test="plateNo != null and plateNo != '' ">
+                and t.carno like '%${plateNo}%'
+            </if>
+            <if test="orderState != null and orderState != '' ">
+                <choose>
+                    <when test="orderState != '-1' ">
+                        and t.exit_type = '${orderState}'
+                    </when>
+                    <otherwise>
+                        and t.exit_type in ('0','7')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+
+    </select>
+
+    <!--    查询出入记录信息-->
+    <select id="queryDetectList" parameterType="java.lang.String" resultMap="BaseResultMap2">
+        SELECT
+        t.nid,
+        t.carno,
+        DATE_FORMAT( t.collectiondate, '%Y-%m-%d %H:%i:%s' ) AS driveTime,
+        t.direction,
+        t.pointcode,
+        t.pointname,
+        t.cpic1path pic,
+        t2.region_code regionCode,
+        t2.region_name regionName
+        FROM
+        park_detect_info t,
+        gate_info t1,
+        park_region_info t2
+        WHERE
+        t.pointcode = t1.pointcode
+        AND t1.region_code = t2.region_code
+        <if test="startDate != null and startDate != '' ">
+            AND t.collectiondate >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.collectiondate &lt;= '${endDate}'
+        </if>
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno LIKE '%${plateNo}%'
+        </if>
+        <if test="direction != null and direction != '' ">
+            AND t.direction = '${direction}'
+        </if>
+    </select>
+
+    <!--    查询支付记录-->
+    <select id="queryPayList" parameterType="java.lang.String" resultMap="BaseResultMap3">
+        SELECT
+        t.pay_fee payFee,
+        t.pay_type payType,
+        DATE_FORMAT( t.pay_time, '%Y-%m-%d %H:%i:%s' ) AS payTime,
+        t1.carno,
+        DATE_FORMAT( t1.collectiondate1, '%Y-%m-%d %H:%i:%s' ) AS collectiondate1,
+        DATE_FORMAT( t1.collectiondate2, '%Y-%m-%d %H:%i:%s' ) AS collectiondate2,
+        t1.park_duration duration,
+        u.username
+        FROM
+        order_pay t
+        LEFT JOIN park_user_info u ON t.user_id = u.userid
+        INNER JOIN park_charge_info t1 ON t.order_no = t1.nid
+        where 1=1
+        <if test="plateNo != null and plateNo != '' ">
+            AND t1.carno LIKE '%${plateNo}%'
+        </if>
+        <if test="payType != null and payType != '' ">
+            AND t.pay_type LIKE '%${payType}%'
+        </if>
+        <if test="startDate != null and startDate != '' ">
+            AND t.pay_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.pay_time &lt;= '${endDate}'
+        </if>
+        <if test="userid != null and userid != '' ">
+            AND t.user_id = '${userid}'
+        </if>
+    </select>
+
+    <!--    查询订单支付详情-->
+    <select id="queryOrderPay" parameterType="java.lang.String" resultMap="BaseResultMap3">
+        SELECT
+        t.pay_fee payFee,
+        t.pay_type payType,
+        DATE_FORMAT( t.pay_time, '%Y-%m-%d %H:%i:%s' ) AS payTime,
+        t1.carno
+        FROM
+        order_pay t,
+        park_charge_info t1
+        WHERE
+        t.order_no = t1.nid
+        <if test="nid != null and nid != '' ">
+            AND t1.nid = '${nid}'
+        </if>
+    </select>
+
+    <!--    场内车查询-->
+    <select id="queryInnerCarList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.ParkInnerCars">
+        SELECT
+        t.nid,
+        t.carno,
+        DATE_FORMAT( t.collectiondate1, '%Y-%m-%d %H:%i:%s' ) AS inTime,
+        t.devicecode,
+        t.cpic_enter_path inImage,
+        t1.devicename,
+        t2.pointcode,
+        t2.pointname,
+        t3.region_code regionCode,
+        t3.region_name regionName
+        FROM
+        park_charge_info t , equip_info t1, gate_info t2, park_region_info t3
+        WHERE
+        t.devicecode = t1.devicecode
+        and t1.pointcode = t2.pointcode
+        and t2.region_code = t3.region_code
+        <if test="startDate != null and startDate != '' ">
+            AND t.collectiondate1 >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.collectiondate1 &lt;= '${endDate}'
+        </if>
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno = '${plateNo}'
+        </if>
+        and t.exit_type IN ( '0', '7' )
+    </select>
+
+    <!--    场内车删除记录查询-->
+    <select id="queryDelOrderList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.DelCars">
+        SELECT
+        t.carno,
+        DATE_FORMAT( t.log_time, '%Y-%m-%d %H:%i:%s' ) AS logTime,
+        DATE_FORMAT( t1.collectiondate1, '%Y-%m-%d %H:%i:%s' ) AS inTime,
+        t.order_no orderNo,
+        t.region_code regionCode,
+        t2.region_name regionName,
+        t.user_id userId,
+        t.user_name userName
+        FROM
+        log_del_inner_cars t,
+        park_charge_info t1,
+        park_region_info t2
+        WHERE
+        t.order_no = t1.nid
+        AND t.region_code = t2.region_code
+        <if test="startDate != null and startDate != '' ">
+            AND t.log_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.log_time &lt;= '${endDate}'
+        </if>
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno LIKE '%${plateNo}%'
+        </if>
+        <if test="userid != null and userid != '' ">
+            AND t.user_id = '${userid}'
+        </if>
+        <if test="regionCode != null and regionCode != '' ">
+            AND t2.region_code = '${regionCode}'
+        </if>
+    </select>
+
+    <!--    抬杆记录查询-->
+    <select id="queryPoleList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.PoleControl">
+        SELECT
+        DATE_FORMAT( t.log_time, '%Y-%m-%d %H:%i:%s' ) AS logTime,
+        t.device_code deviceCode,
+        t.device_name deviceName,
+        t.user_id userId,
+        t.user_name userName,
+        t.img_path imgPath,
+        t3.region_code regionCode,
+        t3.region_name regionName
+        FROM
+        log_pole_controller t,
+        equip_info t1,
+        gate_info t2,
+        park_region_info t3
+        WHERE
+        t.device_code = t1.devicecode
+        AND t1.pointcode = t2.pointcode
+        AND t2.region_code = t3.region_code
+        <if test="startDate != null and startDate != '' ">
+            AND t.log_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.log_time &lt;= '${endDate}'
+        </if>
+        <if test="userid != null and userid != '' ">
+            AND t.user_id = '${userid}'
+        </if>
+    </select>
+
+    <select id="queryCarnoList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.CarnoLogBean">
+        SELECT
+        t.carno,
+        t.device_code deviceCode,
+        t.device_name deviceName,
+        t.img_path imgPath,
+        DATE_FORMAT( t.opt_time, '%Y-%m-%d %H:%i:%s' ) AS optTime,
+        t.user_id userId,
+        t.user_name userName
+        FROM
+        carno_log_info t where 1=1
+        <if test="startDate != null and startDate != '' ">
+            AND t.opt_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.opt_time &lt;= '${endDate}'
+        </if>
+        <if test="userid != null and userid != '' ">
+            AND t.user_id = '${userid}'
+        </if>
+    </select>
+
+    <!--    免费放行记录查询-->
+    <select id="queryFreeGoList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.FreeGos">
+        SELECT
+        t.order_no orderNo,
+        t.carno,
+        t4.region_name regionName,
+        DATE_FORMAT( t.log_time, '%Y-%m-%d %H:%i:%s' ) AS logTime,
+        DATE_FORMAT( t1.collectiondate1, '%Y-%m-%d %H:%i:%s' ) AS inTime,
+        DATE_FORMAT( t1.collectiondate2, '%Y-%m-%d %H:%i:%s' ) AS outTime,
+        t1.cpic_enter_path inImg,
+        t1.cpic_exit_path outImg
+        FROM
+        log_free_go t,
+        park_charge_info t1,
+        equip_info t2,
+        gate_info t3,
+        park_region_info t4
+        WHERE
+        t.order_no = t1.nid
+        AND t1.devicecode_ext = t2.devicecode
+        AND t2.pointcode = t3.pointcode
+        AND t3.region_code = t4.region_code
+        <if test="startDate != null and startDate != '' ">
+            AND t.log_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.log_time &lt;= '${endDate}'
+        </if>
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno = '${plateNo}'
+        </if>
+        <if test="userid != null and userid != '' ">
+            AND t.user_id = '${userid}'
+        </if>
+    </select>
+
+    <!--查询停车场收入情况-->
+    <select id="incomeStatistics" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.bean.ParkIncomeBean">
+        SELECT
+        t.pay_type payType,
+        t1.cate_name cateName,
+        sum( t.pay_fee ) fee
+        FROM
+        order_pay t,
+        dict t1
+        WHERE
+        t.pay_type = t1.id
+        AND t1.category = '1'
+        <if test="startDate != null and startDate != '' ">
+            AND t.pay_time >= '${startDate}'
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            AND t.pay_time &lt;= '${endDate}'
+        </if>
+        GROUP BY
+        t.pay_type,
+        t1.cate_name
+    </select>
+
+
+    <select id="queryOrders4Foreign" parameterType="java.lang.String"
+            resultType="com.lann.openpark.foreign.bean.OrderBean">
+        SELECT
+        t.nid orderNo,
+        t.carno plateNo,
+        t.plate_type plateType,
+        t.collectiondate1 timeIn,
+        t.collectiondate2 timeOut,
+        t.park_duration parkDuration,
+        t.exit_type orderStatus,
+        t.totalcharge orderCharge,
+        t.charge payCharge,
+        t.cpic_enter_path inPicPath,
+        t.cpic_exit_path outPicPath
+        FROM
+        park_charge_info t
+        <where>
+            <if test="startDate != null and startDate != '' ">
+                and t.collectiondate1 >= '${startDate}'
+            </if>
+            <if test="endDate != null and endDate != '' ">
+                and t.collectiondate1 &lt;= '${endDate}'
+            </if>
+            <if test="plateNo != null and plateNo != '' ">
+                and t.carno like '%${plateNo}%'
+            </if>
+            <if test="orderState != null and orderState != '' ">
+                and t.exit_type = '${orderState}'
+            </if>
+        </where>
+
+    </select>
+
+</mapper>

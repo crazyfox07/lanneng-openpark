@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.camera.dao.mapper.ParkVipInfoMapper">
+
+    <!-- 一般白名单 -->
+    <select id="findParkVipInfo" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.bean.ParkVipBean">
+        SELECT
+        t.vip_id vipId,
+        t.carno,
+        t.carno_type carnoType,
+        t.`name`,
+        t.phone,
+        t.vip_type vipType,
+        t.vip_discount,
+        t.valid_begintime validBegintime,
+        t.expiry_date expiryDate,
+        t.remain_money remainMoney,
+        t.group_nid groupNid
+        FROM
+        park_vip_info t
+        WHERE
+        t.carno = #{plateNo,jdbcType=VARCHAR}
+        AND t.licence_type = #{plateType,jdbcType=VARCHAR}
+        AND t.valid_begintime &lt;= #{nowDate}
+        AND t.expiry_date >= #{nowDate}
+    </select>
+
+    <!-- 客户形式的白名单 -->
+    <select id="findParkVipInfo2" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.bean.ParkVipBean">
+        SELECT
+        t.leaguer_id vipId,
+        t1.plate_no carno,
+        t1.plate_type carnoType,
+        t.leaguer_name `name`,
+        t.start_date validBegintime,
+        t.end_date expiryDate
+        FROM
+        park_leaguer t,
+        park_leaguer_cars t1
+        WHERE
+        t.leaguer_id = t1.leaguer_id
+        AND t.start_date &lt;= #{nowDate}
+        AND t.end_date >= #{nowDate}
+        AND t1.plate_no = #{plateNo,jdbcType=VARCHAR}
+        AND t1.plate_type = #{plateType,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 一般停车场本地会员 -->
+    <select id="findParkVipInfo4Client" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.dao.entiy.ParkVipInfo">
+        SELECT
+        t.vip_id vipId,
+        t.carno,
+        t.licence_type licenceType,
+        t.`name`,
+        t.phone,
+        t.valid_begintime validBegintime,
+        t.expiry_date expiryDate
+        FROM
+        park_vip_info t
+        WHERE 1=1
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno LIKE '%${plateNo}%'
+        </if>
+        <if test="phoneNo != null and phoneNo != '' ">
+            AND t.phone = #{phoneNo,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <!-- 一般停车场本地会员（按客户分组） -->
+    <select id="queryParkLeaguerList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.dao.entiy.ParkLeaguer">
+        SELECT
+        DISTINCT t.leaguer_id leaguerId,
+        t.leaguer_name leaguerName,
+        t.leaguer_phone leaguerPhone,
+        t.start_date startDate,
+        t.end_date endDate
+        FROM
+        park_leaguer t
+        LEFT JOIN park_leaguer_cars t1 ON t.leaguer_id = t1.leaguer_id
+        where 1=1
+        <if test="phoneNo != null and phoneNo != '' ">
+            AND t.leaguer_phone = #{phoneNo,jdbcType=VARCHAR}
+        </if>
+        <if test="plateNo != null and plateNo != '' ">
+            AND t1.plate_no LIKE '%${plateNo}%'
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.camera.dao.mapper.EquipSendMsgMapper">
+
+    <!--更新设备语音信息随机数-->
+    <update id="updateEquipSendMsgVoiceRandom" parameterType="java.lang.String">
+        update equip_send_msg t
+            set t.random_num = #{random,jdbcType=VARCHAR}
+            where t.devicecode = #{serialno,jdbcType=VARCHAR}
+            and t.msg_type = 3
+            and t.random_num is null
+            ORDER BY t.insert_time LIMIT 1
+    </update>
+
+</mapper>

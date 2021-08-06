@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="jquery-weui/lib/weui.min.css">
+    <link rel="stylesheet" href="jquery-weui/css/jquery-weui.css">
+
+</head>
+<body ontouchstart>
+
+<form name="from" id="from" method="post">
+    <input type="hidden" name="code" id="code" th:value="${code}">
+    <input type="hidden" name="tempPlateNo" id="tempPlateNo" th:value="${tempPlateNo}">
+</form>
+
+
+<div class="weui-msg">
+    <div class="weui-msg__icon-area">
+        <i th:if="${code} eq 0" class=" weui-icon-success weui-icon_msg"></i>
+        <i th:if="${code} ne 0" class="weui-icon-warn weui-icon_msg"></i>
+    </div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title" th:text="${msg}"></h2>
+        <p class="weui-msg__desc">临时车牌号由系统生成，仅作为该车驶入、驶离本车场的凭据。临时车牌号暂存手机，出场请扫码。</a>
+        </p>
+        <!--        <p class="weui-msg__desc"></a>-->
+        <!--        </p>-->
+    </div>
+</div>
+<div class="weui-msg__opr-area">
+    <p class="weui-btn-area">
+        <a href="javascript:closeWindow();" class="weui-btn weui-btn_primary">关闭页面</a>
+    </p>
+</div>
+
+
+</div>
+
+<div th:include="footer :: copy" class="weui-footer weui-footer_fixed-bottom"></div>
+
+<script src="jquery-weui/lib/jquery-2.1.4.js"></script>
+<script src="jquery-weui/lib/fastclick.js"></script>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+        let code = $("#code").attr("value");
+        // console.log('进入页面即执行...' + code);
+        if ('0' === code) {// 驶入成功，将临时车牌号码写如localstorge
+            var bitcomBindPlate = {};
+            bitcomBindPlate.plateNo = $("#tempPlateNo").attr("value"); // 临时车牌号码
+            localStorage.setItem("bitcomBindPlate", JSON.stringify(bitcomBindPlate));
+        }
+    });
+
+    function closeWindow() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {// 微信扫码关闭页面
+            WeixinJSBridge.call('closeWindow');
+        } else if (ua.match(/AliApp/i) == 'aliapp') {
+            window.AlipayJSBridge.call('closeWebview')// 支付宝扫码关闭页面
+        } else {
+
+        }
+    }
+
+    function setLocalCookie(k, v, t, domain) {
+
+        t = t || 365 * 12 * 60 * 60;
+        domain = domain ? domain : "http://jtss.rzbus.cn/";
+    }
+
+</script>
+<script src="jquery-weui/js/jquery-weui.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lann.openpark.camera.dao.mapper.BlackInfoMapper">
+
+    <select id="findBlackInfo" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.dao.entiy.BlackInfo">
+        SELECT
+        t.black_id blackId,
+        t.carno carno,
+        t.carno_type carnoType,
+        t.valid_begintime validBegintime,
+        t.expiry_date expiryDate
+        FROM
+        black_info t
+        WHERE
+        t.carno = #{plateNo,jdbcType=VARCHAR}
+        AND t.carno_type = #{plateType,jdbcType=VARCHAR}
+        AND t.valid_begintime &lt;= #{nowDate}
+        AND t.expiry_date >= #{nowDate}
+    </select>
+
+    <select id="findParkBlackInfo4Client" parameterType="java.lang.String"
+            resultType="com.lann.openpark.client.dao.entiy.BlackInfo">
+        SELECT
+        t.black_id blackId,
+        t.carno carno,
+        t.carno_type carnoType,
+        t.valid_begintime validBegintime,
+        t.expiry_date expiryDate
+        FROM
+        black_info t
+        WHERE 1=1
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.carno LIKE '%${plateNo}%'
+        </if>
+    </select>
+
+    <!--    异常订单列表查询-->
+    <select id="queryAbnormalkList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.dao.entiy.AbnormalOut">
+        SELECT
+        t.id,
+        t.plate_no plateNo,
+        t.plate_type plateType,
+        t.cumul_num cumulNum
+        FROM
+        abnormal_out t
+        WHERE 1=1
+        <if test="plateNo != null and plateNo != '' ">
+            AND t.plate_no LIKE '%${plateNo}%'
+        </if>
+        <if test="num != null and num != '' ">
+            AND t.cumul_num >= #{num}
+        </if>
+    </select>
+
+    <!--    异常订单车辆详情-->
+    <select id="queryAbnormalDetailList" parameterType="java.lang.String"
+            resultType="com.lann.openpark.camera.dao.entiy.AbnormalOutDetail">
+        SELECT
+        t.id,
+        t.aid,
+        t.img_url imgUrl,
+        t.plate_no plateNo,
+        t.plate_type plateType,
+        t.out_time outTime,
+        DATE_FORMAT( t.out_time, '%Y-%m-%d %H:%i:%s' ) AS outTimeStr
+        FROM
+        abnormal_out_detail t
+        WHERE t.aid = #{aid}
+    </select>
+
+</mapper>

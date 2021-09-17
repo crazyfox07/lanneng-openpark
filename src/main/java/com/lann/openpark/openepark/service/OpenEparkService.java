@@ -510,8 +510,9 @@ public class OpenEparkService {
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(body, header);
             ResponseEntity<String> retbody = restTemplate.postForEntity(url, httpEntity, String.class);
             String jsonString = retbody.getBody();
-            log.info(DateUtil.formatDateYMDHMS(new Date()) + " ==【驶离记录上传】==车牌号==" + parkChargeInfo.getCarno()
-                    + "==orderNo==" + parkChargeInfo.getNid() + "==返回信息==" + jsonString);
+            log.info(DateUtil.formatDateYMDHMS(new Date()) + " ==【出口设备号】：" + parkChargeInfo.getDevicecodeExt() +
+                    " ==【驶离记录上传】==车牌号==" + parkChargeInfo.getCarno() + "==orderNo==" + parkChargeInfo.getNid()
+                    + "==返回信息==" + jsonString);
             // 判断是否上传成功
 //            JSONObject jbRet = JSONObject.fromObject(jsonString);
 //            if ("success".equals(jbRet.getString("result"))) {// 失败更新订单信息
@@ -525,8 +526,9 @@ public class OpenEparkService {
 //            parkChargeInfoRepository.save(parkChargeInfo);// 保存
             return jsonString;
         } catch (Exception e) {
-            log.info(DateUtil.formatDateYMDHMS(new Date()) + " ==【驶离记录上传】==车牌号==" + parkChargeInfo.getCarno()
-                    + "==orderNo==" + parkChargeInfo.getNid() + "==异常信息==" + e.getMessage());
+            log.info(DateUtil.formatDateYMDHMS(new Date()) + " ==【出口设备号】：" + parkChargeInfo.getDevicecodeExt() +
+                    " ==【驶离记录上传】==车牌号==" + parkChargeInfo.getCarno() + "==orderNo==" + parkChargeInfo.getNid()
+                    + "==异常信息==" + e.getMessage());
             JSONObject jb = new JSONObject();
             jb.put("result", "fail");
             jb.put("msg", "驶离记录上传异常");

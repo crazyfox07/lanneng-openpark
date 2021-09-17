@@ -3,6 +3,7 @@ package com.lann.openpark.foreign.web;
 import com.lann.openpark.camera.dao.entiy.EquipInfo;
 import com.lann.openpark.camera.dao.entiy.LedAndVoiceMsg;
 import com.lann.openpark.camera.dao.repository.EquipInfoRepository;
+import com.lann.openpark.client.service.ClientService;
 import com.lann.openpark.common.Constant;
 import com.lann.openpark.common.vo.PageVO;
 import com.lann.openpark.common.vo.ResultVO;
@@ -31,6 +32,9 @@ public class ForeignController {
     @Autowired
     EquipInfoRepository equipInfoRepository;
 
+    @Autowired
+    ClientService clientService;
+
     /**
      * 获取剩余车位数
      *
@@ -48,6 +52,18 @@ public class ForeignController {
     public PageVO queryOrderList(HttpServletRequest request, HttpServletResponse response, String startDate, String endDate,
                                  String plateNo, String orderState, Integer pagenum, Integer pagesize) {
         return foreignService.queryOrderList(startDate, endDate, plateNo, orderState, pagenum, pagesize);
+    }
+
+    /**
+     * 查询所有区域信息
+     *
+     * @Author songqiang
+     * @Description
+     * @Date 2020/12/11 10:03
+     **/
+    @RequestMapping(value = "/queryrRegions")
+    public String queryrRegions(HttpServletRequest request, HttpServletResponse response) {
+        return clientService.queryrRegions();
     }
 
     /**

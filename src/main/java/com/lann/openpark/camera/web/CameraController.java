@@ -1,6 +1,5 @@
 package com.lann.openpark.camera.web;
 
-import com.lann.openpark.camera.dao.entiy.CameraData;
 import com.lann.openpark.camera.service.CameraService;
 import com.lann.openpark.common.response.ResponseResult;
 import com.lann.openpark.util.DateUtil;
@@ -39,7 +38,6 @@ public class CameraController {
     @RequestMapping(value = "/camera/camData", produces = "text/plain;charset=UTF-8")
     public String camData(HttpServletRequest request, HttpServletResponse response) {
         StringBuffer jsonStr = new StringBuffer();
-        CameraData cameraData = new CameraData();
         String line = null;
         // 1.接收相机上报数据
         try {

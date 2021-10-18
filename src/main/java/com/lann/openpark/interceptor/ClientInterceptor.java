@@ -37,7 +37,8 @@ public class ClientInterceptor extends HandlerInterceptorAdapter {
             "/api/client/exportManaulPoleList",
             "/api/client/exportFreeGoList",
             "/api/client/exportCarnoList",
-            "/api/client/exportDetectList");
+            "/api/client/exportDetectList",
+            "/api/client/updateSysConfig");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

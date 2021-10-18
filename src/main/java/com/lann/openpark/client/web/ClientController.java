@@ -9,6 +9,7 @@ import com.lann.openpark.client.dao.entiy.ParkUserInfo;
 import com.lann.openpark.client.dao.entiy.ParkVipInfo;
 import com.lann.openpark.client.service.ClientManagerService;
 import com.lann.openpark.client.service.ClientService;
+import com.lann.openpark.common.Constant;
 import com.lann.openpark.common.enums.DetectEnum;
 import com.lann.openpark.common.enums.OrderStatusEnum;
 import com.lann.openpark.common.enums.PayTypeEnum;
@@ -17,6 +18,7 @@ import com.lann.openpark.common.vo.ResultVO;
 import com.lann.openpark.park.bean.ParkInfoBean;
 import com.lann.openpark.park.service.ParkService;
 import com.lann.openpark.util.DateUtil;
+import com.lann.openpark.util.EhcacheUtil;
 import com.lann.openpark.util.ExportUtil;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
@@ -29,18 +31,14 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -1547,6 +1545,22 @@ public class ClientController {
     @RequestMapping(value = "/deleteLeaguer4Client")
     public String deleteLeaguer4Client(HttpServletRequest request, HttpServletResponse response, String leaguerId) {
         return clientManagerService.deleteLeaguer4Client(leaguerId);
+    }
+
+    /**
+     * 更新parkdb.sys_config
+     *
+     * @param body
+     * @return
+     */
+    @PostMapping(value = "updateSysConfig")
+    public String updateSysConfig(@RequestBody Map body) {
+        String config_key = (String) body.get("config_key");
+        String config_value = (String) body.get("config_value");
+        EhcacheUtil ehcacheUtil = EhcacheUtil.getInstance();
+        Properties properties = (Properties) ehcacheUtil.get(Constant.CONFIG_CACHE, "sys_properties");
+        properties.setProperty(config_key, config_value);
+        return clientManagerService.updateSysConfig(config_key, config_value);
     }
 
 }

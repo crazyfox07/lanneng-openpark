@@ -7,9 +7,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/parkdb?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
-    username: lanneng
-    password: lanneng2020
+    url: jdbc:mysql://192.168.1.102:3306/parkdb?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: test
+    password: aabbcc2020
     druid:
       initialSize: 5  # 初始建立连接数量
       minIdle: 5  # 最小连接数量

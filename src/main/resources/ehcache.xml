@@ -2,6 +2,7 @@
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 
     <diskStore path="D:/home/Tmp_Ehcache"/>
+    <!--    <diskStore path="/root/data/Tmp_Ehcache"/>-->
 
     <!--    defaultCache:echcache的默认缓存策略  -->
     <defaultCache

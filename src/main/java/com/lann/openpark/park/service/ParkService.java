@@ -1,5 +1,7 @@
 package com.lann.openpark.park.service;
 
+import com.lann.openpark.camera.bean.ParkVipBean;
+import com.lann.openpark.camera.dao.mapper.ParkVipInfoMapper;
 import com.lann.openpark.charge.bizobj.ParkingInfo;
 import com.lann.openpark.charge.dao.entiy.ChargePlanConfig;
 import com.lann.openpark.charge.dao.mapper.ChargePlanConfigMapper;
@@ -43,6 +45,8 @@ public class ParkService {
     ChargePlanConfigMapper chargePlanConfigMapper;
     @Autowired
     ChargeService chargeService;
+    @Autowired
+    ParkVipInfoMapper parkVipInfoMapper;
 
     /**
      * 查询停车场信息
@@ -119,6 +123,43 @@ public class ParkService {
 
         // 设置一个同步锁，将更新车位做成线程安全
         synchronized ((Object) countLock) {
+            // ParkInfoBean parkInfoBean = this.findParkInfo();
+            ParkRegionInfo region = this.findParkRegionInfo(regionCode);
+            int rectifyCount = region.getJudgeRemainParkingNumber() == null ? 0 : region.getJudgeRemainParkingNumber().intValue();
+            int remainBerthCount = region.getRegionRectifyCount() + cars + rectifyCount;// 车位剩余数 = 车位剩余数（+-）1后再计算调整数
+            // parkInfoBean.setRemainBerthCount(remainBerthCount);// 重新设置车位剩余数
+            region.setRegionRectifyCount(remainBerthCount);// 重新设置车位剩余数
+            if (rectifyCount != 0) {
+                region.setJudgeRemainParkingNumber(0);// 车位调整数重新设置为0
+            }
+            parkRegionInfoRepository.save(region);
+            return 1;
+        }
+
+    }
+
+    /**
+     * @param cars
+     * @param regionCode
+     * @param plateNo
+     * @param plateType
+     * @return
+     * @throws Exception
+     */
+    public int updateBerthCount(int cars, String regionCode, String plateNo, String plateType) throws Exception {
+
+        // 设置一个同步锁，将更新车位做成线程安全
+        synchronized ((Object) countLock) {
+            EhcacheUtil ehcacheUtil = EhcacheUtil.getInstance();
+            Properties properties = (Properties) ehcacheUtil.get(Constant.CONFIG_CACHE, "sys_properties");
+            // 0白名单不影响车位, 1白名单影响车位
+            if (properties.getProperty("white_influnce_parking_spot").equals("0")) {
+                List<ParkVipBean> list_vip = parkVipInfoMapper.findParkVipInfo(plateNo, plateType, DateUtil.toDate("yyyy-MM-dd"));
+                if (list_vip.size() > 0) {
+                    log.info("会员车辆，不计入车位数计算");
+                    return 1;
+                }
+            }
             // ParkInfoBean parkInfoBean = this.findParkInfo();
             ParkRegionInfo region = this.findParkRegionInfo(regionCode);
             int rectifyCount = region.getJudgeRemainParkingNumber() == null ? 0 : region.getJudgeRemainParkingNumber().intValue();

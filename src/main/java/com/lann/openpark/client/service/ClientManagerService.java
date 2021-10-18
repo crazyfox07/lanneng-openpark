@@ -3,6 +3,7 @@ package com.lann.openpark.client.service;
 import com.lann.openpark.client.dao.entiy.ParkLeaguerCars;
 import com.lann.openpark.client.dao.repository.ParkLeaguerCarsRepository;
 import com.lann.openpark.client.dao.repository.ParkLeaguerRepository;
+import com.lann.openpark.system.dao.repository.SysConfigRepository;
 import com.lann.openpark.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
@@ -22,6 +23,8 @@ public class ClientManagerService {
     ParkLeaguerRepository parkLeaguerRepository;
     @Autowired
     ParkLeaguerCarsRepository parkLeaguerCarsRepository;
+    @Autowired
+    SysConfigRepository sysConfigRepository;
 
     /**
      * 客户下车辆添加
@@ -96,6 +99,31 @@ public class ClientManagerService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("===" + DateUtil.formatDateYMDHMS(new Date()) + " === 客户车辆删除接口异常 ==");
+            jb.put("code", "99");
+            jb.put("message", "Exception：" + e.getMessage());
+            jb.put("data", new JSONArray());
+            return jb.toString();
+        }
+    }
+
+    /**
+     * 更新parkdb.sys_config
+     *
+     * @param config_key
+     * @param config_value
+     * @return
+     */
+    public String updateSysConfig(String config_key, String config_value) {
+        JSONObject jb = new JSONObject();
+        try {
+            int result = sysConfigRepository.updateConfigValue(config_key, config_value);
+            jb.put("code", "0");
+            jb.put("message", result);
+            return jb.toString();
+
+        } catch (Exception e) {
+            log.error("更新parkdb.sys_config中的字段white_influnce_parking_spot失败");
+            log.error(e.toString());
             jb.put("code", "99");
             jb.put("message", "Exception：" + e.getMessage());
             jb.put("data", new JSONArray());

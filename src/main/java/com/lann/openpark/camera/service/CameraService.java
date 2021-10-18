@@ -310,7 +310,7 @@ public class CameraService {
         gateMsg.setDevicecode(equipGateInfo.getDevicecode());
         ehcacheUtil.put(Constant.PARK_CACHE, "gate_" + equipGateInfo.getDevicecode(), gateMsg);
         // 3.车位数减1
-        parkService.updateBerthCount(-1, equipGateInfo.getRegionCode());
+        parkService.updateBerthCount(-1, equipGateInfo.getRegionCode(), plateNo, String.valueOf(plateType));
         // 语音消息下发
         if (isVoice) {
             // 会员车和非会员车播报不一样
@@ -517,7 +517,7 @@ public class CameraService {
             parkInnerCars.setPlateType(String.valueOf(plateType));
             parkInnerCarsRepository.save(parkInnerCars);
             // 更新停车场车位信息
-            parkService.updateBerthCount(-1, equipGateInfo.getRegionCode());
+            parkService.updateBerthCount(-1, equipGateInfo.getRegionCode(), plateNo, String.valueOf(plateType));
             // 语音消息下发
             if (isVoice) {
                 // 会员车和非会员车播报不一样
@@ -595,7 +595,7 @@ public class CameraService {
         }
 
         // 车位数+1
-        parkService.updateBerthCount(1, equipGateInfo.getRegionCode());
+        parkService.updateBerthCount(1, equipGateInfo.getRegionCode(), plateNo, String.valueOf(plateType));
 
         return ResponseResult.SUCCESS().toString();
     }
@@ -773,7 +773,7 @@ public class CameraService {
             parkInnerCarsRepository.delete(parkInnerCars);
         }
         // 更新停车场车位信息
-        parkService.updateBerthCount(list_inner_cars.size(), equipGateInfo.getRegionCode());
+        parkService.updateBerthCount(list_inner_cars.size(), equipGateInfo.getRegionCode(), plateNo, String.valueOf(plateType));
 
         ////////////////////////////////////计费开始////////////////////////////////////////////////////
         // 获取订单费用

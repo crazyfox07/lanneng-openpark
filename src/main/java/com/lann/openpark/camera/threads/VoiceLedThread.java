@@ -123,6 +123,10 @@ public class VoiceLedThread implements Runnable {
             } else if (5 == voiceType) {
                 voiceMsg = voiceConfig.getTemplate();
                 voiceMsg = voiceMsg.replace("${plateNo}", plateNo);
+            } else if (14 == voiceType) {
+                voiceMsg = voiceConfig.getTemplate();
+                voiceMsg = voiceMsg.replace("${plateNo}", plateNo);
+                voiceMsg = voiceMsg.replace("${fee}", fee + "");
             }
 
             //////////LED显示消息///////////////////////////////
@@ -207,6 +211,14 @@ public class VoiceLedThread implements Runnable {
                 list1.add(this.getLineBynum(list, 1));
                 list1.add(this.getLineBynum(list, 2));
                 list1.add(this.getLineBynum(list, 3));
+            } else if (14 == ledType) {  // 建行无感支付
+                LedConfigBean ledConfig14_1 = this.getLineBynum(list, 1);
+                ledConfig14_1.setText(ledConfig14_1.getText().replace("${plateNo}", plateNo));
+                list1.add(ledConfig14_1);
+                list1.add(this.getLineBynum(list, 2));
+                LedConfigBean ledConfig14_3 = this.getLineBynum(list, 3);
+                ledConfig14_3.setText(ledConfig14_3.getText().replace("${fee}", String.valueOf(fee)));
+                list1.add(ledConfig14_3);
             }
 
             Map map = VoiceLedUtil.getVoicrAndLedStr(list1, voiceMsg, 0);

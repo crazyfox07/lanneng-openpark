@@ -206,6 +206,14 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--		引用外部jar包-->
+        <dependency>
+            <groupId>com.ccb</groupId>
+            <artifactId>ccbpay</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ccbpay-api-java-1.0.0.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
@@ -227,6 +235,17 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+
+        <!-- 打包时引用外部jar包-->
+        <resources>
+            <resource>
+                <directory>lib</directory>
+                <targetPath>/BOOT-INF/lib/</targetPath>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>

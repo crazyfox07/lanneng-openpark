@@ -23,6 +23,7 @@ public class Constant {
     public static final String PAY_TYPE_TCK = "1211";// 停车卡
     public static final String PAY_TYPE_SHDK = "1226";// 商户代扣
     public static final String PAY_TYPE_ETC = "1229";// ETC扣费
+    public static final String PAY_TYPE_CCB_WUGAN = "1230";  // 建行无感支付
     ////////////////////支付方式////////////////////////////////
 
     public static final String EQUIP_TYPE_CAMERA = "01";// 智能摄像机
@@ -244,6 +245,10 @@ public class Constant {
             return "公众号支付";
         } else if ("1229".equals(payType)) {
             return "ETC支付";
+        } else if ("1230".equals(payType)) {
+            return "建行无感支付";
+        } else if ("1231".equals(payType)) {
+            return "建行卡支付";
         } else {
             return "其他支付方式";
         }

@@ -1784,7 +1784,7 @@ public class ClientService {
             rule.setBorrowTimeConfig(borrowTimeConfig);
             LoopChargeConfig loopConfig = getLoopChargeConfigByJson(json.getJSONObject("loopConfig"));
             rule.setLoopConfig(loopConfig);
-            rule.setLimitCharge(json.getIntValue("limitCharge"));
+            rule.setLimitCharge(json.getDoubleValue("limitCharge"));
             AttachRule attachRule = getAttachRuleByJson(json.getJSONObject("attachRule"));
             rule.setAttachRule(attachRule);
 

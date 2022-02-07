@@ -22,7 +22,7 @@ public interface ParkChargeInfoRepository extends JpaRepository<ParkChargeInfo, 
     @Query(value = "select t from ParkChargeInfo t where t.carno = :plateNo and t.plateType = :PlateType and t.exitType in('0','7')  order by t.collectiondate1 desc")
     List<ParkChargeInfo> findOutCarOrder(@Param(value = "plateNo") String plateNo, @Param(value = "PlateType") String PlateType);
 
-    
+
     /**
      * 根据nid号查询订单信息
      *
@@ -32,6 +32,9 @@ public interface ParkChargeInfoRepository extends JpaRepository<ParkChargeInfo, 
      **/
     @Query(value = " select t from ParkChargeInfo t where t.nid = :nid ")
     ParkChargeInfo findParkChargeInfoByNid(@Param(value = "nid") String nid);
+
+    @Query(value = "select t from ParkChargeInfo t where t.carno = :carno and  t.collectiondate1 >= :collectiondate1 order by t.collectiondate1 desc")
+    List<ParkChargeInfo> findParkChargeInfoByPlateNo(@Param(value = "carno") String carno, @Param(value = "collectiondate1") Date collectiondate1);
 
     /**
      * 查询车牌号未结束的订单

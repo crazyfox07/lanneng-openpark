@@ -243,6 +243,8 @@ public class Constant {
             return "停车卡";
         } else if ("1212".equals(payType)) {
             return "公众号支付";
+        } else if ("1227".equals(payType)) {
+            return "建行聚合";
         } else if ("1229".equals(payType)) {
             return "ETC支付";
         } else if ("1230".equals(payType)) {

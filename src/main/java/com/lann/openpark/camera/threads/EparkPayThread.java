@@ -164,10 +164,11 @@ public class EparkPayThread implements Runnable {
                     JSONObject kkJsonParam = new JSONObject();
                     kkJsonParam.put("ORDERID", parkChargeInfo.getNid()); // 交易订单号
                     kkJsonParam.put("carNo", parkChargeInfo.getCarno()); // 车牌号
-                    kkJsonParam.put("AMOUNT", String.valueOf(0.01)); // 收费金额
+                    // todo 待修改
+                    kkJsonParam.put("AMOUNT", String.valueOf(parkChargeInfo.getCharge())); // 收费金额
                     System.out.println(String.valueOf(parkingFee));
-//                    JSONObject wgzfkkResult = ccbWuGanService.wgzfkk(kkJsonParam);
-//                    System.out.println(wgzfkkResult);
+                    JSONObject wgzfkkResult = ccbWuGanService.wgzfkk(kkJsonParam);
+                    log.info(wgzfkkResult.toString());
                     if (isVoice) {
                         // 下发语音和LED消息
                         // voiceType = 4

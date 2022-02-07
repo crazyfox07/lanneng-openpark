@@ -51,7 +51,7 @@ public class VoiceLedThread implements Runnable {
     // private boolean isVip;// 是否是VIP
     ParkVipBean parkVipBean;
 
-    private double fee;// 费用
+    private float fee;// 费用
 
 
     /**
@@ -70,7 +70,7 @@ public class VoiceLedThread implements Runnable {
         // this.isVip = isVip;
         this.parkVipBean = parkVipBean;
         this.voiceChannel = voiceChannel;
-        this.fee = fee;
+        this.fee = Double.valueOf(fee).floatValue();
     }
 
     /**

@@ -708,6 +708,10 @@ public class OpenEparkService {
                 return this.receiveGateBarrierControl(jb);
             } else if ("notifyParkOrderCoupon".equals(method)) {// 优惠券下发
                 return this.receiveNotifyParkOrderCoupon(jb);
+            } else if ("queryOrderFeeByDevNo".equals(method)) {  // 根据设备ID号，查询当前出口的车辆订单信息
+                return this.queryOrderFeeByDevNo(jb);
+            } else if ("queryOrderFeeByPlateNo".equals(method)) { //根据车牌号查询费用
+                return this.queryOrderFeeByPlateNo(jb);
             } else {
                 JSONObject ret = new JSONObject();
                 ret.put("result", "fail");
@@ -722,6 +726,36 @@ public class OpenEparkService {
             ret.put("msg", "exception");
             return ret.toString();
         }
+    }
+
+    private String queryOrderFeeByPlateNo(JSONObject jb) throws Exception {
+        JSONObject ret = new JSONObject();
+        ret.put("result", "fail");
+        ret.put("msg", "no find order");
+        ret.put("responseBody", null);
+
+        try {
+            String plateNo = jb.getString("plateNo");// 车牌号
+            Date collectiondate1 = DateUtil.getBeginDate(7); // 选择大于collectiondate1的时间进入的车辆
+            // 根据车牌号，查询订单信息
+            List<ParkChargeInfo> parkChargeInfoList = parkChargeInfoRepository.findParkChargeInfoByPlateNo(plateNo, collectiondate1);
+            if (parkChargeInfoList.size() > 0) {
+                ParkChargeInfo parkChargeInfo = parkChargeInfoList.get(0);
+                String orderNo = parkChargeInfo.getNid();
+                JSONArray orders = new JSONArray();
+                orders.add(0, orderNo);
+                jb.put("orders", orders);
+                String orderFee = this.receiveQueryOrderFee(jb);
+                return orderFee;
+            } else {
+                return ret.toString();
+            }
+        } catch (Exception e) {
+            log.error(e.toString() + ":    " + jb.toString());
+            return ret.toString();
+        }
+
+
     }
 
     /**
@@ -941,6 +975,7 @@ public class OpenEparkService {
                     jbOrder.put("derateFee", 0);
                     jbOrder.put("protocolVersion", "1");
                     jbOrder.put("needPay", fee);
+                    jbOrder.put("timeIn", DateUtil.formatDateYMDHMS(timeIn));
 
                     // 查询会员信息
                     List<ParkVipBean> list_vip = parkVipInfoMapper.findParkVipInfo(parkChargeInfo.getCarno(), String.valueOf(plateType), DateUtil.toDate("yyyy-MM-dd"));
@@ -964,6 +999,7 @@ public class OpenEparkService {
                     jbOrder.put("derateFee", 0);
                     jbOrder.put("needPay", parkChargeInfo.getTotalcharge() - parkChargeInfo.getCharge());
                     jbOrder.put("protocolVersion", "1");
+                    jbOrder.put("timeIn", DateUtil.formatDateYMDHMS(timeIn));
                     responseBodyJa.add(jbOrder);
                 }
                 if (jb.containsKey("leaguerId")) {// 判断是否有会员ID
@@ -1829,6 +1865,61 @@ public class OpenEparkService {
             jb.put("result", "fail");
             jb.put("msg", "Exception：" + e.getMessage());
             return jb.toString();
+        }
+    }
+
+
+    /**
+     * 根据设备ID号，查询当前出口的车辆订单信息
+     *
+     * @param jb
+     * @return
+     * @throws Exception
+     */
+    public String queryOrderFeeByDevNo(JSONObject jb) throws Exception {
+        // 返回信息
+        JSONObject resJson = new JSONObject();
+        try {
+            //  根据设备ID号，查询当前出口的车辆
+            String orderJsonStr = this.receiveGetThirdOrderByParkCodeAndOther(jb);
+            System.out.println(orderJsonStr);
+            JSONObject orderJson = JSONObject.fromObject(orderJsonStr);
+            JSONObject orderBodyJson = orderJson.getJSONArray("responseBody").getJSONObject(0);
+            String orderNo = orderBodyJson.getString("orderNo");
+            String plateNo = orderBodyJson.getString("plateNo");
+            String plateType = orderBodyJson.getString("plateType");
+
+            JSONObject responseBodyJson = new JSONObject();
+            responseBodyJson.put("orderNo", orderNo);
+            responseBodyJson.put("plateNo", plateNo);
+            responseBodyJson.put("plateType", plateType);
+            // 查询订单费用
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("parkCode", jb.getString("parkCode"));
+            JSONArray orders = new JSONArray();// 订单编号
+            orders.add(0, orderNo);
+            jsonParam.put("orders", orders);
+            String orderFeeStr = this.receiveQueryOrderFee(jsonParam);
+            JSONObject orderFeeJson = JSONObject.fromObject(orderFeeStr);
+            System.out.println(orderFeeStr);
+            JSONObject orderFeeResponseJson = orderFeeJson.getJSONArray("responseBody").getJSONObject(0);
+            responseBodyJson.put("timeIn", orderFeeResponseJson.getString("timeIn"));
+            responseBodyJson.put("parkDuration", orderFeeResponseJson.getInt("parkDuration"));
+            responseBodyJson.put("totalCost", orderFeeResponseJson.getDouble("totalCost"));
+            responseBodyJson.put("realCost", orderFeeResponseJson.getDouble("realCost"));
+
+            resJson.put("result", "success");
+            resJson.put("msg", "查询订单费用成功");
+            resJson.put("responseBody", responseBodyJson);
+
+            return resJson.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("===" + DateUtil.formatDateYMDHMS(new Date()) + " === 通过设备号查询订单信息请求异常==");
+            resJson.put("result", "fail");
+            resJson.put("msg", "Exception：" + e.getMessage());
+            resJson.put("responseBody", null);
+            return resJson.toString();
         }
     }
 

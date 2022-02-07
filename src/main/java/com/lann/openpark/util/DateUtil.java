@@ -498,6 +498,21 @@ public class DateUtil {
         calendar.add(13, secondNum);
         return calendar.getTime();
     }
+
+    public static Date getBeginDate(int dayNum) throws ParseException {
+        java.util.Date day = new java.util.Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = df.format(day);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date sDate = format.parse(dateString);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        //减少7天
+        cal.add(Calendar.DAY_OF_MONTH, -dayNum);
+        //Calendar转为Date类型
+        Date date = cal.getTime();
+        return date;
+    }
 }
 
 
